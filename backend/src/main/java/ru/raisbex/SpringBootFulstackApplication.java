@@ -9,5 +9,4 @@ public class SpringBootFulstackApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootFulstackApplication.class, args);
 	}
-
 }
