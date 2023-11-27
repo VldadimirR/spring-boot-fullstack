@@ -1,49 +1,48 @@
-  name: CI - Build Backend
+name: CI - Build Backend
 
-  on:
-    pull_request:
-      branches:
-        - main
-      paths:
-        - backend/**
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - backend/**
 
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-      services:
-        postgres:
-          image: postgres:14.1
-          env:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: idLxCcMRT15O
-            POSTGRES_DB: customer
-          ports:
-            - 5432:5432
-          options: >-
-            --health-cmd pg_isready
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
-
-      defaults:
-        run:
-          working-directory: ./backend
-      steps:
-        - uses: actions/checkout@v3
-        - name: Send Slack Message
-          run: >
-            curl -X POST -H 'Content-type: application/json'
-            --data '{"text":"Deployment started :start: :spring:"}' 
-            ${{ secrets.SLACK_WEBHOOK_URL }}
-        - uses: actions/setup-java@v3
-          with:
-            distribution: 'temurin'
-            java-version: '17'
-            cache: 'maven'
-        - name: Send Slack Message
-          run: >
-            curl -X POST -H 'Content-type: application/json' 
-            --data '{"text":":maven: Building with Maven"}' 
-            ${{ secrets.SLACK_WEBHOOK_URL }}
-        - name: Build and run Unit/Integration Tests with Maven
-          run: mvn -ntp -B verify
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    services:
+      postgres:
+        image: postgres:14.1
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: idLxCcMRT15O
+          POSTGRES_DB: customer
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Send Slack Message
+        run: >
+          curl -X POST -H 'Content-type: application/json'
+          --data '{"text":"Deployment started :start: :spring:"}' 
+          ${{ secrets.SLACK_WEBHOOK_URL }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      - name: Send Slack Message
+        run: >
+          curl -X POST -H 'Content-type: application/json' 
+          --data '{"text":":maven: Building with Maven"}' 
+          ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Build and run Unit/Integration Tests with Maven
+        run: mvn -ntp -B verify
