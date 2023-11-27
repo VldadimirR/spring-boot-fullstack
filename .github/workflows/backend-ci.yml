@@ -25,6 +25,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+
     defaults:
       run:
         working-directory: ./backend
@@ -47,3 +48,26 @@ jobs:
           ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Build and run Unit/Integration Tests with Maven
         run: mvn -ntp -B verify
+      defaults:
+        run:
+          working-directory: ./backend
+      steps:
+        - uses: actions/checkout@v3
+        - name: Send Slack Message
+          run: >
+            curl -X POST -H 'Content-type: application/json'
+            --data '{"text":"Deployment started :start: :spring:"}' 
+            ${{ secrets.SLACK_WEBHOOK_URL }}
+        - uses: actions/setup-java@v3
+          with:
+            distribution: 'temurin'
+            java-version: '17'
+            cache: 'maven'
+        - name: Send Slack Message
+          run: >
+            curl -X POST -H 'Content-type: application/json' 
+            --data '{"text":":maven: Building with Maven"}' 
+            ${{ secrets.SLACK_WEBHOOK_URL }}
+        - name: Build and run Unit/Integration Tests with Maven
+          run: mvn -ntp -B verify
+
