@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 import ru.raisbex.customer.Customer;
 import ru.raisbex.customer.CustomerRegistrationRequest;
 import ru.raisbex.customer.CustomerUpdateRequest;
+import ru.raisbex.customer.Gender;
 
 
 import java.util.List;
@@ -39,10 +40,10 @@ public class CustomerIT {
         String name = fakerName.fullName();
         String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
         int age = RANDOM.nextInt(1, 100);
-
+        Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age
+                name, email, age, gender
         );
         // send a post request
          webTestClient.post()
@@ -78,8 +79,8 @@ public class CustomerIT {
                 id,
                 name,
                 email,
-                age
-        );
+                age,
+                gender);
 
         assertThat(allCustomers).contains(expectedCustomer);
 
@@ -104,14 +105,14 @@ public class CustomerIT {
         String name = fakerName.fullName();
         String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
         int age = RANDOM.nextInt(1, 100);
-
+        Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email,  age
+                name, email,  age, gender
         );
 
         CustomerRegistrationRequest request2 = new CustomerRegistrationRequest(
-                name, email + ".uk",  age
+                name, email + ".uk",  age,gender
         );
 
         // send a post request to create customer 1
@@ -180,10 +181,10 @@ public class CustomerIT {
         String name = fakerName.fullName();
         String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
         int age = RANDOM.nextInt(1, 100);
-
+        Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email,  age
+                name, email,  age, gender
         );
 
         // send a post request to create customer 1
@@ -246,8 +247,8 @@ public class CustomerIT {
                 id,
                 newName,
                 email,
-                age
-        );
+                age,
+                gender);
 
         assertThat(updatedCustomer).isEqualTo(expected);
 
