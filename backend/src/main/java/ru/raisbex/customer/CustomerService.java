@@ -1,32 +1,43 @@
 package ru.raisbex.customer;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.raisbex.exception.DuplicateResourceException;
 import ru.raisbex.exception.RequestValidationException;
 import ru.raisbex.exception.ResourceNotFoundException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
 
     private final CustomerDao customerDao;
 
+    private final CustomerDTOMapper  customerDTOMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public CustomerService(@Qualifier("jpa") CustomerDao customerDao) {
+
+
+    public CustomerService(@Qualifier("jpa") CustomerDao customerDao, CustomerDTOMapper customerDTOMapper, PasswordEncoder passwordEncoder) {
         this.customerDao = customerDao;
+        this.customerDTOMapper = customerDTOMapper;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public List<CustomerDTO> getAllCustomers() {
+        return customerDao.selectAllCustomers()
+                .stream()
+                .map(customerDTOMapper)
+                .collect(Collectors.toList());
     }
 
 
-    public List<Customer> getAllCustomers() {
-        return customerDao.selectAllCustomers();
-    }
-
-
-    public Customer getCustomer(Integer customerId) {
-        return customerDao.selectCustomerById(customerId).
-                orElseThrow(() -> new ResourceNotFoundException(
+    public CustomerDTO getCustomer(Integer customerId) {
+        return customerDao.selectCustomerById(customerId)
+                .map(customerDTOMapper)
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "customer with id [%s] not found".formatted(customerId)
         ));
     }
@@ -42,8 +53,9 @@ public class CustomerService {
 
        Customer customer = new Customer(
               request.name(),
-              request.email(),
-              request.age(),
+               request.email(),
+               passwordEncoder.encode(request.password()),
+               request.age(),
                request.gender());
 
        customerDao.insertCustomer(customer);
@@ -62,7 +74,10 @@ public class CustomerService {
 
 
     public void updateCustomer(Integer customerID, CustomerUpdateRequest updateRequest) {
-        Customer customer = getCustomer(customerID);
+        Customer customer = customerDao.selectCustomerById(customerID)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "customer with id [%s] not found".formatted(customerID)
+                ));
 
         boolean changes = false;
 

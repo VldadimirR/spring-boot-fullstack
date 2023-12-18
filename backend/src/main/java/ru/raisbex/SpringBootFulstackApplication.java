@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.raisbex.customer.Customer;
 import ru.raisbex.customer.CustomerRepository;
 import ru.raisbex.customer.Gender;
@@ -21,14 +22,15 @@ public class SpringBootFulstackApplication {
 
 	@Bean
 	CommandLineRunner runner(
-			CustomerRepository customerRepository) {
+			CustomerRepository customerRepository,
+			PasswordEncoder passwordEncoder) {
 		return args -> {
-			createRandomCustomer(customerRepository);
+			createRandomCustomer(customerRepository,  passwordEncoder);
 			// testBucketUploadAndDownload(s3Service, s3Buckets);
 		};
 	}
 
-	private static void createRandomCustomer(CustomerRepository customerRepository) {
+	private static void createRandomCustomer(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
 		var faker = new Faker();
 		Random random = new Random();
 		Name name = faker.name();
@@ -40,8 +42,10 @@ public class SpringBootFulstackApplication {
 		Customer customer = new Customer(
 				firstName +  " " + lastName,
 				email,
+				passwordEncoder.encode("password"),
 				age,
 				gender);
 		customerRepository.save(customer);
+		System.out.println(email);
 	}
 }
