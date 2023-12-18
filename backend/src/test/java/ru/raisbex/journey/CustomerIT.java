@@ -37,7 +37,7 @@ public class CustomerIT {
         Name fakerName = faker.name();
 
         String name = fakerName.fullName();
-        String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
+        String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@raisbex.ru";
         int age = RANDOM.nextInt(1, 100);
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
@@ -112,7 +112,7 @@ public class CustomerIT {
         Name fakerName = faker.name();
 
         String name = fakerName.fullName();
-        String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
+        String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@raisbex.ru";
         int age = RANDOM.nextInt(1, 100);
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
@@ -194,7 +194,7 @@ public class CustomerIT {
         Name fakerName = faker.name();
 
         String name = fakerName.fullName();
-        String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
+        String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@raisbex.ru";
         int age = RANDOM.nextInt(1, 100);
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 

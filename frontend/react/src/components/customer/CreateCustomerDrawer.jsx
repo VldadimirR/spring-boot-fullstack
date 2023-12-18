@@ -24,7 +24,7 @@ const CreateCustomerDrawer = ({ fetchCustomers }) => {
         >
             Create customer
         </Button>
-        <Drawer isOpen={isOpen} onClose={onClose} >
+        <Drawer isOpen={isOpen} onClose={onClose} size={"xl"} >
             <DrawerOverlay />
             <DrawerContent>
                 <DrawerCloseButton />

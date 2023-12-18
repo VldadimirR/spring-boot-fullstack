@@ -1,13 +1,37 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
 import {ChakraProvider} from '@chakra-ui/react'
+import { createStandaloneToast } from '@chakra-ui/toast'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import './index.css'
+import Login from "./components/login/Login.jsx";
+import App from "./App.jsx";
+import AuthProvider from "./components/context/AuthContext.jsx";
+import ProtectedRoute from "./components/shared/ProtectedRoute.jsx";
 
-
-import { createStandaloneToast } from '@chakra-ui/react'
 
 const { ToastContainer } = createStandaloneToast()
+
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Login />
+    },
+    // {
+    //     path: "/signup",
+    //     element: <Signup />
+    // },
+    {
+        path: "dashboard",
+        element:<ProtectedRoute><App/></ProtectedRoute>
+    },
+    // {
+    //     path: "dashboard/customers",
+    //     element: <ProtectedRoute><Customer /></ProtectedRoute>
+    // }
+])
 
 
 ReactDOM
@@ -15,10 +39,10 @@ ReactDOM
     .render(
         <React.StrictMode>
             <ChakraProvider>
-                    <App/>
-                <ToastContainer>
-
-                </ToastContainer>
+                <AuthProvider>
+                    <RouterProvider router={router} />
+                </AuthProvider>
+                <ToastContainer />
             </ChakraProvider>
         </React.StrictMode>,
     )
