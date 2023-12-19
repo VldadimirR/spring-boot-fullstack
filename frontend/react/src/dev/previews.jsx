@@ -1,7 +1,7 @@
 import React from 'react'
 import {ComponentPreview, Previews} from '@react-buddy/ide-toolbox'
 import {PaletteTree} from './palette'
-import CreateCustomerForm from "../components/customer/CreateCustomerForm.jsx";
+import CreateCustomerForm from "../components/shared/CreateCustomerForm.jsx";
 
 const ComponentPreviews = () => {
     return (
