@@ -6,10 +6,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import './index.css'
 import Login from "./components/login/Login.jsx";
-import App from "./App.jsx";
+import Customer from "./Customer.jsx";
 import AuthProvider from "./components/context/AuthContext.jsx";
 import ProtectedRoute from "./components/shared/ProtectedRoute.jsx";
 import Signup from "./components/signup/Signup.jsx";
+import Home from "./Home.jsx";
 
 
 const { ToastContainer } = createStandaloneToast()
@@ -26,11 +27,11 @@ const router = createBrowserRouter([
     },
     {
         path: "dashboard",
-        element:<ProtectedRoute><App/></ProtectedRoute>
+        element:<ProtectedRoute><Home/></ProtectedRoute>
     },
     {
         path: "dashboard/customers",
-        element: <ProtectedRoute><App /></ProtectedRoute>
+        element: <ProtectedRoute><Customer /></ProtectedRoute>
     }
 ])
 
