@@ -2,11 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationRequest} from '../../models/authentication-request';
 import {Observable} from 'rxjs';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
+
+  private readonly authUrl = `${environment.api.baseUrl}/${environment.api.authUrl}`;
 
   constructor(
     private http: HttpClient
@@ -14,6 +17,6 @@ export class AuthenticationService {
   }
 
   login(authRequest: AuthenticationRequest): Observable<AuthenticatorResponse> {
-    return this.http.post<AuthenticatorResponse>('http://localhost:8080/api/v1/auth/login', authRequest);
+    return this.http.post<AuthenticatorResponse>(this.authUrl, authRequest);
   }
 }
